@@ -27,6 +27,7 @@ public class playerController : MonoBehaviour
     void Start()
     {
         HPOrig = HP;
+        updatePlayerHPBar();
     }
 
     void Update()
@@ -81,6 +82,11 @@ public class playerController : MonoBehaviour
             speed /= sprintMod;
             isSprinting = false;
         }
+    }
+
+    public void updatePlayerHPBar()
+    {
+        uiManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
     }
 
 }
