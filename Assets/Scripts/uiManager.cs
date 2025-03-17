@@ -11,6 +11,7 @@ public class uiManager : MonoBehaviour
     [SerializeField] GameObject menuActive;
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuWin, menuLose;
+    [SerializeField] GameObject damageScreen;
 
     public Image playerHPBar;
 
@@ -68,6 +69,19 @@ public class uiManager : MonoBehaviour
 
     }
 
+    public void youWin()
+    {
+        statePause();
+        menuActive = menuWin;
+        menuActive.SetActive(true);
+    }
+
+    public IEnumerator flashScreenDamage()
+    {
+        instance.damageScreen.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        instance.damageScreen.SetActive(false);
+    }
 
 
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class playerController : MonoBehaviour
+public class playerController : MonoBehaviour, IDamage
 {
     [Header("----- Components -----")]
     [SerializeField] CharacterController controller;
@@ -16,13 +16,20 @@ public class playerController : MonoBehaviour
     [SerializeField][Range(5, 20)] int jumpSpeed;
     [SerializeField][Range(15, 40)] int gravity;
 
+    [Header("----- Gun Stats -----")]
+    [SerializeField] int shootDamage;
+    [SerializeField] int shootDist;
+    [SerializeField] float shootRate;
+
     Vector3 moveDir;
     Vector3 playerVel;
 
     int jumpCount;
     int HPOrig;
+    public int score;
 
     bool isSprinting;
+    bool isShooting;
 
     void Start()
     {
@@ -59,6 +66,32 @@ public class playerController : MonoBehaviour
             playerVel = Vector3.zero;
         }
 
+        if (Input.GetButton("Fire1") && !isShooting)
+        {
+            StartCoroutine(shoot());
+        }
+    }
+
+    IEnumerator shoot()
+    {
+        isShooting = true;
+
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreMask))
+        {
+            Debug.Log(hit.collider.name);
+
+            IDamage dmg = hit.collider.GetComponent<IDamage>();
+            if (dmg != null)
+            {
+                dmg.takeDamage(shootDamage);
+            }
+
+        }
+
+        yield return new WaitForSeconds(shootRate);
+
+        isShooting = false;
     }
 
     void jump()
@@ -81,6 +114,18 @@ public class playerController : MonoBehaviour
         {
             speed /= sprintMod;
             isSprinting = false;
+        }
+    }
+
+    public void takeDamage(int amount)
+    {
+        HP -= amount;
+        updatePlayerHPBar();
+        StartCoroutine(uiManager.instance.flashScreenDamage());
+
+        if (HP <= 0)
+        {
+            uiManager.instance.youLose();
         }
     }
 

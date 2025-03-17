@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 3158742509786440322}
   - component: {fileID: 8495819865002758854}
   - component: {fileID: 5481730781623389928}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -218,6 +218,10 @@ MonoBehaviour:
   jumpMax: 2
   jumpSpeed: 12
   gravity: 28
+  shootDamage: 1
+  shootDist: 15
+  shootRate: 0.25
+  score: 0
 --- !u!136 &8495819865002758854
 CapsuleCollider:
   m_ObjectHideFlags: 0

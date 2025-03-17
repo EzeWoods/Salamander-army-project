@@ -1,4 +1,3 @@
-using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 
 
@@ -16,7 +15,8 @@ public class damage : MonoBehaviour
     {
         if (type == damageType.moving)
         {
-
+            rb.velocity = transform.forward * speed;
+            Destroy(gameObject, destroyTime);
         }
     }
 
