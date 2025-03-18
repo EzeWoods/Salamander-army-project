@@ -35,6 +35,7 @@ public class playerController : MonoBehaviour, IDamage
     {
         HPOrig = HP;
         updatePlayerHPBar();
+        uiManager.instance.updateGameGoal(0);
     }
 
     void Update()

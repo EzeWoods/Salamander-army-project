@@ -41,6 +41,7 @@ public class enemyAI : MonoBehaviour, IDamage
     {
         colorOrig = model.material.color;
         //gameManager.instance.updateGameGoal(1);
+        uiManager.instance.updateEnemiesInScene(1);
         stoppingDistOrig = agent.stoppingDistance;
         startingPos = transform.position;
     }
@@ -166,7 +167,9 @@ public class enemyAI : MonoBehaviour, IDamage
 
         if (HP <= 0)
         {
-            
+            //gameManager.instance.playerScript.score++;
+            uiManager.instance.updateEnemiesInScene(-1);
+            uiManager.instance.updateGameGoal(1);
             Destroy(gameObject);
         }
     }

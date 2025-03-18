@@ -12,16 +12,22 @@ public class uiManager : MonoBehaviour
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuWin, menuLose;
     [SerializeField] GameObject damageScreen;
-
+    [SerializeField] TMP_Text scoreCountText;
+    [SerializeField] TMP_Text scoreGoalText;
+    [SerializeField] TMP_Text enemiesLeftText;
     public Image playerHPBar;
 
     float timeScaleOrig;
     public bool isPaused;
 
+    int scoreGoal;
+    int enemiesLeft;
+
     void Awake()
     {
         instance = this;
         timeScaleOrig = Time.timeScale;
+        uiManager.instance.updateScoreToWin(winZone.instance.scoreWinVar);
     }
 
     // Update is called once per frame
@@ -74,6 +80,28 @@ public class uiManager : MonoBehaviour
         statePause();
         menuActive = menuWin;
         menuActive.SetActive(true);
+    }
+
+    public void updateGameGoal(int amount)
+    {
+        if(gameManager.instance)
+        {
+            gameManager.instance.playerScript.score += amount;
+            scoreCountText.text = gameManager.instance.playerScript.score.ToString("F0");
+        }
+
+    }
+
+    public void updateScoreToWin(int amount)
+    {
+        scoreGoal += amount;
+        scoreGoalText.text = scoreGoal.ToString("F0");
+    }
+
+    public void updateEnemiesInScene(int amount)
+    {
+        enemiesLeft += amount;
+        enemiesLeftText.text = enemiesLeft.ToString("F0");
     }
 
     public IEnumerator flashScreenDamage()

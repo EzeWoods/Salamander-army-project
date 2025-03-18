@@ -144,7 +144,7 @@ Transform:
   m_Children:
   - {fileID: 6996961121202564207}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4293969813649773196
 MeshFilter:
@@ -215,7 +215,7 @@ MonoBehaviour:
   HP: 5
   speed: 5
   sprintMod: 3
-  jumpMax: 2
+  jumpMax: 1
   jumpSpeed: 12
   gravity: 28
   shootDamage: 1
