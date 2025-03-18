@@ -20,6 +20,7 @@ public class enemyAI : MonoBehaviour, IDamage
     [SerializeField] int roamDist;
 
     [SerializeField] GameObject bullet;
+    [SerializeField] GameObject itemDrop;
     [SerializeField] float shootRate;
 
     float angleToPlayer;
@@ -44,6 +45,8 @@ public class enemyAI : MonoBehaviour, IDamage
         uiManager.instance.updateEnemiesInScene(1);
         stoppingDistOrig = agent.stoppingDistance;
         startingPos = transform.position;
+
+        co = StartCoroutine(roam());
     }
 
     // Update is called once per frame
@@ -167,6 +170,9 @@ public class enemyAI : MonoBehaviour, IDamage
 
         if (HP <= 0)
         {
+            Debug.Log("Enemy died, dropping item.");
+            Instantiate(itemDrop, transform.position + Vector3.up * 0.5f , Quaternion.identity);
+
             //gameManager.instance.playerScript.score++;
             uiManager.instance.updateEnemiesInScene(-1);
             uiManager.instance.updateGameGoal(1);

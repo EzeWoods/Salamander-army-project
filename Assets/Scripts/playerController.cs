@@ -8,6 +8,7 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreMask;
 
+
     [Header("----- Stats -----")]
     [SerializeField][Range(1, 10)] int HP;
     [SerializeField][Range(1, 5)] int speed;
