@@ -17,6 +17,7 @@ public class winZone : MonoBehaviour
     {
         instance = this;
         scoreWinVar = scoreToWin;
+        uiManager.instance.updateScoreToWin(scoreWinVar);
     }
 
     // Update is called once per frame

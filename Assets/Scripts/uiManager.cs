@@ -27,7 +27,7 @@ public class uiManager : MonoBehaviour
     {
         instance = this;
         timeScaleOrig = Time.timeScale;
-        uiManager.instance.updateScoreToWin(winZone.instance.scoreWinVar);
+        
     }
 
     // Update is called once per frame
