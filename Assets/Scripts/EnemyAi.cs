@@ -22,6 +22,7 @@ public class enemyAI : MonoBehaviour, IDamage
     [SerializeField] GameObject bullet;
     [SerializeField] GameObject itemDrop;
     [SerializeField] float shootRate;
+    [SerializeField] bool isBoss;
 
     float angleToPlayer;
     float stoppingDistOrig;
@@ -43,6 +44,7 @@ public class enemyAI : MonoBehaviour, IDamage
         colorOrig = model.material.color;
         //gameManager.instance.updateGameGoal(1);
         uiManager.instance.updateEnemiesInScene(1);
+        gameManager.instance.enemiesAlive++;
         stoppingDistOrig = agent.stoppingDistance;
         startingPos = transform.position;
 
@@ -166,16 +168,25 @@ public class enemyAI : MonoBehaviour, IDamage
             isRoaming = false;
         }
 
+        
         StartCoroutine(flashRed());
 
         if (HP <= 0)
         {
-            Debug.Log("Enemy died, dropping item.");
-            Instantiate(itemDrop, transform.position + Vector3.up * 0.5f , Quaternion.identity);
+            //Debug.Log("Enemy died, dropping item.");
+            //Instantiate(itemDrop, transform.position + Vector3.up * 0.5f , Quaternion.identity);
 
             //gameManager.instance.playerScript.score++;
             uiManager.instance.updateEnemiesInScene(-1);
+            gameManager.instance.enemiesAlive--;
             uiManager.instance.updateGameGoal(1);
+
+            if(isBoss)
+            {
+                uiManager.instance.youWin();
+                
+            }
+
             Destroy(gameObject);
         }
     }

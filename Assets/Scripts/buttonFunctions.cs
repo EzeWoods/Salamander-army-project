@@ -24,4 +24,16 @@ public class buttonFunctions : MonoBehaviour
             Application.Quit();
 #endif
     }
+
+    public void Play()
+    {
+        Time.timeScale = 1; // Reset time to normal
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void MainMenu()
+    {
+        Time.timeScale = 1; // Reset time to normal
+        SceneManager.LoadScene(0);
+    }
 }

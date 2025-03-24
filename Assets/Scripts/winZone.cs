@@ -6,28 +6,40 @@ public class winZone : MonoBehaviour
 {
     public static winZone instance;
 
-    [SerializeField] bool needKillsToWin;
-    [SerializeField] int scoreToWin;
+    [SerializeField] public int scoreToWin;
     [SerializeField] GameObject doorToOpen;
     [SerializeField] GameObject exitTextPrompt;
+    [SerializeField] bool haveToDefeatBoss;
     bool inZone = false;
-    public int scoreWinVar;
+
+    public bool bossDefeated;
 
     private void Awake()
     {
         instance = this;
-        scoreWinVar = scoreToWin;
-        uiManager.instance.updateScoreToWin(scoreWinVar);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(gameManager.instance.playerScript.score >= scoreToWin)
-        {
-            doorToOpen.SetActive(false);
-            exitTextPrompt.SetActive(true);
-        }
+
+            if (haveToDefeatBoss && bossDefeated)
+            {
+                exitTextPrompt.SetActive(true);
+
+                if (gameManager.instance.playerScript.score >= gameManager.instance.scoreToWin)
+                {
+                    uiManager.instance.youWin();
+                }
+            }
+            else if(gameManager.instance.playerScript.score >= gameManager.instance.scoreToWin)
+            {
+                doorToOpen.SetActive(false);
+                exitTextPrompt.SetActive(true);
+            }
+
+
+ 
     }
 
     private void OnTriggerEnter(Collider other)
@@ -36,15 +48,10 @@ public class winZone : MonoBehaviour
         {
             inZone = true;
 
-            if(needKillsToWin)
+            if (gameManager.instance.playerScript.score >= gameManager.instance.scoreToWin)
             {
-                if(gameManager.instance.playerScript.score >= scoreToWin)
-                {
-                    uiManager.instance.youWin();
-                }    
-                
+                uiManager.instance.youWin();
             }
-
         }
     }
 

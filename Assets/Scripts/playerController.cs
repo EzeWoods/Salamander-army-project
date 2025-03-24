@@ -7,6 +7,7 @@ public class playerController : MonoBehaviour, IDamage
     [Header("----- Components -----")]
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreMask;
+    [SerializeField] GameObject minimap;
 
 
     [Header("----- Stats -----")]
@@ -21,6 +22,9 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] int shootDamage;
     [SerializeField] int shootDist;
     [SerializeField] float shootRate;
+    [SerializeField][Range(0.0f, 5.0f)] float reloadSpeed;
+    [SerializeField][Range(0, 999)] int maxStoredAmmo;
+    [SerializeField][Range(0, 40)] int maxCurrentAmmo;
 
     Vector3 moveDir;
     Vector3 playerVel;
@@ -28,15 +32,23 @@ public class playerController : MonoBehaviour, IDamage
     int jumpCount;
     int HPOrig;
     public int score;
+    int currentAmmo;
+    int storedAmmo;
 
     bool isSprinting;
     bool isShooting;
 
+    private bool isReloading;
+
     void Start()
     {
         HPOrig = HP;
-        updatePlayerHPBar();
+        currentAmmo = maxCurrentAmmo;
+        storedAmmo = maxStoredAmmo;
         uiManager.instance.updateGameGoal(0);
+        updatePlayerHPBar();
+        updateAmmoUI();
+        minimap.SetActive(true);
     }
 
     void Update()
@@ -68,15 +80,31 @@ public class playerController : MonoBehaviour, IDamage
             playerVel = Vector3.zero;
         }
 
-        if (Input.GetButton("Fire1") && !isShooting)
+        if (Input.GetButton("Fire1") && !isShooting && currentAmmo > 0 && !isReloading)
         {
             StartCoroutine(shoot());
+        }
+
+        if(!isReloading && currentAmmo < storedAmmo)
+        {
+            if(Input.GetKeyDown(KeyCode.R))
+            {
+                StartCoroutine(reload());
+            }
+            
+            if(currentAmmo <= 0)
+            {
+                uiManager.instance.showReloadPrompt();
+            }
         }
     }
 
     IEnumerator shoot()
     {
         isShooting = true;
+
+        currentAmmo--;
+        updateAmmoUI();
 
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreMask))
@@ -87,6 +115,7 @@ public class playerController : MonoBehaviour, IDamage
             if (dmg != null)
             {
                 dmg.takeDamage(shootDamage);
+                StartCoroutine(uiManager.instance.hitMarkerDisplay());
             }
 
         }
@@ -94,6 +123,27 @@ public class playerController : MonoBehaviour, IDamage
         yield return new WaitForSeconds(shootRate);
 
         isShooting = false;
+    }
+
+    IEnumerator reload()
+    {
+        if (storedAmmo <= 0 || currentAmmo == maxCurrentAmmo)
+            yield break;
+
+        isReloading = true;
+        Debug.Log("Reloading...");
+
+        yield return new WaitForSeconds(reloadSpeed);
+
+        int ammoNeeded = maxCurrentAmmo - currentAmmo;
+        int ammoToReload = Mathf.Min(ammoNeeded, storedAmmo);
+
+        currentAmmo += ammoToReload;
+        storedAmmo -= ammoToReload;
+
+        updateAmmoUI();
+       
+        isReloading = false;
     }
 
     void jump()
@@ -134,6 +184,12 @@ public class playerController : MonoBehaviour, IDamage
     public void updatePlayerHPBar()
     {
         uiManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+    }
+
+    public void updateAmmoUI()
+    {
+        uiManager.instance.ammoLabel.text = "/" + storedAmmo.ToString("F0");
+        uiManager.instance.ammoLabelText.text = currentAmmo.ToString("F0");
     }
 
 }
