@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -103,7 +102,7 @@ public class enemyAI : MonoBehaviour, IDamage
 
         Debug.DrawRay(headPos.position, playerDir);
 
-          RaycastHit hit;
+        RaycastHit hit;
         if (Physics.Raycast(headPos.position, playerDir, out hit))
         {
             //I can see the player!!!
@@ -168,7 +167,7 @@ public class enemyAI : MonoBehaviour, IDamage
             isRoaming = false;
         }
 
-        
+
         StartCoroutine(flashRed());
 
         if (HP <= 0)
@@ -181,10 +180,10 @@ public class enemyAI : MonoBehaviour, IDamage
             gameManager.instance.enemiesAlive--;
             uiManager.instance.updateGameGoal(1);
 
-            if(isBoss)
+            if (isBoss)
             {
                 uiManager.instance.youWin();
-                
+
             }
 
             Destroy(gameObject);

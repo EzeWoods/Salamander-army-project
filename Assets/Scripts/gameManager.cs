@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class gameManager : MonoBehaviour
@@ -10,7 +8,6 @@ public class gameManager : MonoBehaviour
     public playerController playerScript;
     [SerializeField] public int scoreToWin;
     public int enemiesAlive;
-
     void Awake()
     {
         instance = this;
@@ -21,6 +18,6 @@ public class gameManager : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 }

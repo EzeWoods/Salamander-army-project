@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class winZone : MonoBehaviour
@@ -23,23 +21,23 @@ public class winZone : MonoBehaviour
     void Update()
     {
 
-            if (haveToDefeatBoss && bossDefeated)
+        if (haveToDefeatBoss && bossDefeated)
+        {
+            exitTextPrompt.SetActive(true);
+
+            if (gameManager.instance.playerScript.score >= gameManager.instance.scoreToWin)
             {
-                exitTextPrompt.SetActive(true);
-
-                if (gameManager.instance.playerScript.score >= gameManager.instance.scoreToWin)
-                {
-                    uiManager.instance.youWin();
-                }
+                uiManager.instance.youWin();
             }
-            else if(gameManager.instance.playerScript.score >= gameManager.instance.scoreToWin)
-            {
-                doorToOpen.SetActive(false);
-                exitTextPrompt.SetActive(true);
-            }
+        }
+        else if (gameManager.instance.playerScript.score >= gameManager.instance.scoreToWin)
+        {
+            doorToOpen.SetActive(false);
+            exitTextPrompt.SetActive(true);
+        }
 
 
- 
+
     }
 
     private void OnTriggerEnter(Collider other)

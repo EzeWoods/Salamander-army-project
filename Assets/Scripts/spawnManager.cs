@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class spawnManager : MonoBehaviour
@@ -11,7 +10,7 @@ public class spawnManager : MonoBehaviour
     [SerializeField] int totalWaves; // 2
 
     int currWave = 0;
-    
+
 
     bool readyToSpawn;
 
@@ -31,7 +30,7 @@ public class spawnManager : MonoBehaviour
 
             yield return new WaitUntil(() => gameManager.instance.enemiesAlive <= 0);
 
-            if(currWave < totalWaves)
+            if (currWave < totalWaves)
             {
                 yield return new WaitForSeconds(waveDelay);
             }
@@ -41,16 +40,16 @@ public class spawnManager : MonoBehaviour
 
     IEnumerator spawnEnts()
     {
-         for (int i = 0; i < numToSpawn; i++)
-         {
-             yield return new WaitForSeconds(0.3f);
+        for (int i = 0; i < numToSpawn; i++)
+        {
+            yield return new WaitForSeconds(0.3f);
 
-             int spawnInt = Random.Range(0, spawnPos.Length);
-             GameObject enemyRand = objectToSpawn[Random.Range(0, objectToSpawn.Length)];
+            int spawnInt = Random.Range(0, spawnPos.Length);
+            GameObject enemyRand = objectToSpawn[Random.Range(0, objectToSpawn.Length)];
 
-             Instantiate(enemyRand, spawnPos[spawnInt].position, spawnPos[spawnInt].rotation);
+            Instantiate(enemyRand, spawnPos[spawnInt].position, spawnPos[spawnInt].rotation);
 
-         }
+        }
 
     }
 }

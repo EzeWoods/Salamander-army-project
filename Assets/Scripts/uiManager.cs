@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class uiManager : MonoBehaviour
@@ -102,7 +102,7 @@ public class uiManager : MonoBehaviour
 
     public void updateGameGoal(int amount)
     {
-        if(gameManager.instance)
+        if (gameManager.instance)
         {
             gameManager.instance.playerScript.score += amount;
             scoreCountText.text = gameManager.instance.playerScript.score.ToString("F0");
@@ -163,5 +163,12 @@ public class uiManager : MonoBehaviour
             menuActive = null;
         }
     }
+
+    public void loadNextLevel()
+    {
+        Time.timeScale = 1f; // Resume the game if it was paused
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); // Load the next level
+    }
+
 
 }
