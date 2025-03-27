@@ -4,6 +4,13 @@ public class gameManager : MonoBehaviour
 {
     public static gameManager instance;
 
+    public int currentWave { get; private set; } = 1;
+
+    public void AdvanceWave()
+    {
+        currentWave++;
+    }
+
     public GameObject player;
     public playerController playerScript;
     [SerializeField] public int scoreToWin;

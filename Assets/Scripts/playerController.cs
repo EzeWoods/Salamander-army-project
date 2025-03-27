@@ -1,3 +1,4 @@
+using Kinemation.SightsAligner;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ public class playerController : MonoBehaviour, IDamage
 {
     [Header("----- Components -----")]
     [SerializeField] CharacterController controller;
+    [SerializeField] AudioSource aud;
     [SerializeField] LayerMask ignoreMask;
     [SerializeField] GameObject minimap;
 
@@ -26,6 +28,15 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField][Range(0, 999)] int maxStoredAmmo;
     [SerializeField][Range(0, 40)] int maxCurrentAmmo;
 
+    [Header("~~~ Audio ~~~")]
+    [SerializeField] AudioClip[] audSteps;
+    [SerializeField][Range(0, 1)] float audStepsVol;
+    [SerializeField] AudioClip[] audHurt;
+    [SerializeField][Range(0, 1)] float audHurtVol;
+    [SerializeField] AudioClip[] audJump;
+    [SerializeField][Range(0, 1)] float audJumpVol;
+
+
     Vector3 moveDir;
     Vector3 playerVel;
 
@@ -39,6 +50,8 @@ public class playerController : MonoBehaviour, IDamage
     bool isShooting;
 
     private bool isReloading;
+
+    bool isPlayingSteps;
 
     void Start()
     {
@@ -61,6 +74,11 @@ public class playerController : MonoBehaviour, IDamage
     {
         if (controller.isGrounded)
         {
+          if (moveDir.magnitude > 0.3f && !isPlayingSteps)
+            {
+                StartCoroutine(playSteps());
+            }
+
             jumpCount = 0;
             playerVel = Vector3.zero;
         }
@@ -99,6 +117,20 @@ public class playerController : MonoBehaviour, IDamage
         }
     }
 
+    IEnumerator playSteps()
+    {
+        isPlayingSteps = true;
+
+        aud.PlayOneShot(audSteps[Random.Range(0, audSteps.Length)], audStepsVol);
+
+        if (!isSprinting)
+            yield return new WaitForSeconds(0.5f);
+        else
+            yield return new WaitForSeconds(0.3f);
+
+        isPlayingSteps = false;
+    }
+
     IEnumerator shoot()
     {
         isShooting = true;
@@ -106,6 +138,8 @@ public class playerController : MonoBehaviour, IDamage
         currentAmmo--;
         updateAmmoUI();
 
+
+       
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreMask))
         {
@@ -150,6 +184,7 @@ public class playerController : MonoBehaviour, IDamage
     {
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
         {
+            aud.PlayOneShot(audJump[Random.Range(0, audJump.Length)], audJumpVol);
             jumpCount++;
             playerVel.y = jumpSpeed;
         }
@@ -172,6 +207,7 @@ public class playerController : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
+        aud.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], audHurtVol);
         updatePlayerHPBar();
         StartCoroutine(uiManager.instance.flashScreenDamage());
 

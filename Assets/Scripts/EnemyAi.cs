@@ -5,6 +5,10 @@ using UnityEngine.AI;
 
 public class enemyAI : MonoBehaviour, IDamage
 {
+    [Header("Base Stats")]
+    [SerializeField] int baseHP;
+    [SerializeField] float baseShootRate;
+    [SerializeField] float difficultyScalingFactor = 0.1f;
     [SerializeField] NavMeshAgent agent;
     [SerializeField] Animator anim;
     [SerializeField] Renderer model;
@@ -47,7 +51,18 @@ public class enemyAI : MonoBehaviour, IDamage
         stoppingDistOrig = agent.stoppingDistance;
         startingPos = transform.position;
 
+
         co = StartCoroutine(roam());
+    }
+
+    void ApplyDifficultyScaling()
+    {
+        int currentWave = gameManager.instance.currentWave;
+
+        float scalingMultiplier = 1 + (difficultyScalingFactor * (currentWave - 1));
+        HP = Mathf.RoundToInt(baseHP * scalingMultiplier);
+        shootRate = baseShootRate / scalingMultiplier;
+
     }
 
     // Update is called once per frame
