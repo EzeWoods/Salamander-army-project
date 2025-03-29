@@ -30,12 +30,8 @@ public class playerController : MonoBehaviour, IDamage
 
     [Header("~~~ Audio ~~~")]
     [SerializeField] AudioClip[] audSteps;
-    [SerializeField][Range(0, 1)] float audStepsVol;
     [SerializeField] AudioClip[] audHurt;
-    [SerializeField][Range(0, 1)] float audHurtVol;
     [SerializeField] AudioClip[] audJump;
-    [SerializeField][Range(0, 1)] float audJumpVol;
-
 
     Vector3 moveDir;
     Vector3 playerVel;
@@ -66,7 +62,11 @@ public class playerController : MonoBehaviour, IDamage
 
     void Update()
     {
-        movement();
+        if(!uiManager.instance.isPaused)
+        {
+            movement();
+        }
+
         sprint();
     }
 
@@ -113,6 +113,7 @@ public class playerController : MonoBehaviour, IDamage
             if(currentAmmo <= 0)
             {
                 uiManager.instance.showReloadPrompt();
+                
             }
         }
     }
@@ -121,7 +122,7 @@ public class playerController : MonoBehaviour, IDamage
     {
         isPlayingSteps = true;
 
-        aud.PlayOneShot(audSteps[Random.Range(0, audSteps.Length)], audStepsVol);
+        aud.PlayOneShot(audSteps[Random.Range(0, audSteps.Length)], menuManager.instance.playerSettings.volumePercent);
 
         if (!isSprinting)
             yield return new WaitForSeconds(0.5f);
@@ -165,6 +166,7 @@ public class playerController : MonoBehaviour, IDamage
             yield break;
 
         isReloading = true;
+        //uiManager.instance.hideReloadPrompt();
         Debug.Log("Reloading...");
 
         yield return new WaitForSeconds(reloadSpeed);
@@ -184,7 +186,7 @@ public class playerController : MonoBehaviour, IDamage
     {
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
         {
-            aud.PlayOneShot(audJump[Random.Range(0, audJump.Length)], audJumpVol);
+            aud.PlayOneShot(audJump[Random.Range(0, audJump.Length)], menuManager.instance.playerSettings.volumePercent);
             jumpCount++;
             playerVel.y = jumpSpeed;
         }
@@ -207,7 +209,7 @@ public class playerController : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
-        aud.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], audHurtVol);
+        aud.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], menuManager.instance.playerSettings.volumePercent);
         updatePlayerHPBar();
         StartCoroutine(uiManager.instance.flashScreenDamage());
 
@@ -226,6 +228,7 @@ public class playerController : MonoBehaviour, IDamage
     {
         uiManager.instance.ammoLabel.text = "/" + storedAmmo.ToString("F0");
         uiManager.instance.ammoLabelText.text = currentAmmo.ToString("F0");
+        uiManager.instance.hideReloadPrompt();
     }
 
 }

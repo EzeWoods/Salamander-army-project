@@ -8,5 +8,5 @@ public class playerSettings : ScriptableObject
 {
     public int horizontalSensitivity;
     public int verticalSensitivity;
-    public int volumePercent;
+    public float volumePercent;
 }

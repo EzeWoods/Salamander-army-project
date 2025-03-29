@@ -8,7 +8,7 @@ public class spawnManager : MonoBehaviour
     [SerializeField] Transform[] spawnPos;
     [SerializeField] float waveDelay;
     [SerializeField] int totalWaves; // 2
-
+    [SerializeField] AudioSource aud;
     int currWave = 0;
 
 
@@ -17,11 +17,14 @@ public class spawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        aud.volume = menuManager.instance.playerSettings.volumePercent;
         StartCoroutine(spawnWaves());
     }
 
     IEnumerator spawnWaves()
     {
+        aud.PlayOneShot(aud.clip, aud.volume);
+
         while (currWave < totalWaves)
         {
             yield return StartCoroutine(spawnEnts());

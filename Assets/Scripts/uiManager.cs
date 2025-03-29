@@ -20,6 +20,7 @@ public class uiManager : MonoBehaviour
     [SerializeField] public TMP_Text ammoLabelText;
     [SerializeField] GameObject hitmarker;
     [SerializeField] GameObject reloadPrompt;
+    [SerializeField] GameObject optionsMenu;
     public Image playerHPBar;
 
     float timeScaleOrig;
@@ -81,6 +82,10 @@ public class uiManager : MonoBehaviour
         Time.timeScale = timeScaleOrig;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        if (optionsMenu.active)
+            optionsMenu.SetActive(false);
+
         menuActive.SetActive(false);
         menuActive = null;
     }
@@ -138,8 +143,7 @@ public class uiManager : MonoBehaviour
 
     public void showReloadPrompt()
     {
-        menuActive = reloadPrompt;
-        menuActive.SetActive(true);
+        reloadPrompt.SetActive(true);
     }
 
     public IEnumerator showScreenMessage()
@@ -151,8 +155,7 @@ public class uiManager : MonoBehaviour
 
     public void hideReloadPrompt()
     {
-        menuActive.SetActive(false);
-        menuActive = null;
+        reloadPrompt.SetActive(false);
     }
 
     public void hidePrompt()

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class menuManager : MonoBehaviour
 {
+    public static menuManager instance;
     public playerSettings playerSettings;
     public Slider sensX;
     public Slider sensY;
@@ -15,7 +16,12 @@ public class menuManager : MonoBehaviour
 
     private int sensXNumber;
     private int sensYNumber;
-    private int volumePercentNumber;
+    private float volumePercentNumber;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +36,7 @@ public class menuManager : MonoBehaviour
     {
         sensXNumber = (int)sensX.value;
         sensYNumber = (int)sensY.value;
-        volumePercentNumber = (int)volumePercent.value;
+        volumePercentNumber = volumePercent.value;
 
         playerSettings.horizontalSensitivity = sensXNumber;
         playerSettings.verticalSensitivity = sensYNumber;
